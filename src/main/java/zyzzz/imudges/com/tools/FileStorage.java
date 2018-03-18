@@ -15,4 +15,8 @@ public class FileStorage {
     public String getBaseUrl() {
         return baseUrl;
     }
+    public String getUrl(String url){
+        return baseUrl+url;
+    }
+
 }
