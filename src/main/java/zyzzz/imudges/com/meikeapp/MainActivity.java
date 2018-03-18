@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             Intent intent=new Intent(MainActivity.this, LoginActivity.class); startActivity(intent);
 
+
         } else if (id == R.id.nav_course) {
 
 
