@@ -31,10 +31,11 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".RegisterActivity"
-                    android:label="用户注册"
-            android:parentActivityName=".LoginActivity">
-        </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="用户注册"
+            android:parentActivityName=".LoginActivity" />
+        <activity android:name=".UserSettingActivity"></activity>
     </application>
 
 </manifest>
