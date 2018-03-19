@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,9 +29,17 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import zyzzz.imudges.com.tools.FileStorage;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -183,8 +192,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            FileStorage fileStorage = new FileStorage();
+            RequestParams params = new RequestParams(fileStorage.getUrl("userLogin"));
+            params.addQueryStringParameter("email",email);
+            params.addQueryStringParameter("password",password);
+            x.http().get(params, new Callback.CommonCallback() {
+                @Override
+                public void onSuccess(Object result) {
+
+                    Toast.makeText(LoginActivity.this,"ok",Toast.LENGTH_SHORT).show();
+                }
+                //请求异常后的回调方法
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    Toast.makeText(LoginActivity.this,"gg",Toast.LENGTH_SHORT).show();
+                }
+                //主动调用取消请求的回调方法
+                @Override
+                public void onCancelled(CancelledException cex) {
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+
+            });
         }
     }
 
