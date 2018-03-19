@@ -14,6 +14,7 @@
             android:layout_marginLeft="10dp"
             android:src="@drawable/course_item" />
         <TextView
+            android:id="@+id/coursename"
             android:textSize="20dp"
             android:gravity="center_vertical"
             android:layout_width="match_parent"

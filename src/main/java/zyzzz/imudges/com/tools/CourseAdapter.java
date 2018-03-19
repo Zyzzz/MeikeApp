@@ -1,12 +1,16 @@
 package zyzzz.imudges.com.tools;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.List;
 
+import zyzzz.imudges.com.meikeapp.R;
 import zyzzz.imudges.com.model.CourseInformationModel;
 import zyzzz.imudges.com.model.CourseModel;
 
@@ -27,21 +31,27 @@ public class CourseAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return  (courseModels==null)?0:courseModels.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return courseModels.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return courseModels.get(position).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(
+                    R.layout.item, null);
+            TextView textView = (TextView) convertView.findViewById(R.id.coursename);
+            textView.setText(courseModels.get(position).getName());
+        }
+        return convertView;
     }
 }
