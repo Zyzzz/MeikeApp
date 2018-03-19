@@ -37,17 +37,23 @@ public class RegisterActivity extends AppCompatActivity {
         reginPassword= (EditText) findViewById(R.id.regin_password);
         checkPassword = (EditText) findViewById(R.id.check_password);
         signuoButton = (Button) findViewById(R.id.email_sign_up_button);
+        signuoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doRegister();
+            }
+        });
     }
-    @Event(type = View.OnClickListener.class,value = R.id.email_sign_up_button)
+
     private void doRegister(){
         String email = reginEmail.getText().toString();
         String rPassword = reginPassword.getText().toString();
         String cPassword = checkPassword.getText().toString();
-        if(rPassword!=cPassword){
+        if(!rPassword.equals(cPassword)){
             Toast.makeText(RegisterActivity.this,"两次输入的密码不同" ,Toast.LENGTH_SHORT).show();
-        }else if(isEmailValid(email)){
+        }else if(!isEmailValid(email)){
             Toast.makeText(RegisterActivity.this,"请输入正确邮箱" ,Toast.LENGTH_SHORT).show();
-        }else if(isPasswordValid(rPassword)){
+        }else if(!isPasswordValid(rPassword)){
             Toast.makeText(RegisterActivity.this,"密码长度要大于6" ,Toast.LENGTH_SHORT).show();
         }else{
             FileStorage fileStorage = new FileStorage();
@@ -63,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Gson gson =new Gson();
                     userModel = gson.fromJson(result,UserModel.class);
                     if(userModel.getStatus()==0) {
-
+                        Toast.makeText(RegisterActivity.this,"注册成功" ,Toast.LENGTH_SHORT).show();
                     }else {
                         loginResult = userModel.getResult();
                     }
