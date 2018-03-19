@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xutils.common.Callback;
+import org.xutils.ex.HttpException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -193,20 +194,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             FileStorage fileStorage = new FileStorage();
+            //fileStorage.getUrl("userLogin")
             RequestParams params = new RequestParams(fileStorage.getUrl("userLogin"));
-            params.addQueryStringParameter("email",email);
-            params.addQueryStringParameter("password",password);
-            x.http().get(params, new Callback.CommonCallback() {
-                @Override
-                public void onSuccess(Object result) {
+//            params.addQueryStringParameter("email",email);
+//            params.addQueryStringParameter("password",password);
+            x.http().get(params, new Callback.CommonCallback<String>() {
 
-                    Toast.makeText(LoginActivity.this,"ok",Toast.LENGTH_SHORT).show();
+                @Override
+                public void onSuccess(String result) {
+                    Toast.makeText(LoginActivity.this,result,Toast.LENGTH_SHORT).show();
                 }
+
                 //请求异常后的回调方法
                 @Override
                 public void onError(Throwable ex, boolean isOnCallback) {
-                    Toast.makeText(LoginActivity.this,"gg",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                    if (ex instanceof HttpException) { // 网络错误
+                        HttpException httpEx = (HttpException) ex;
+                        int responseCode = httpEx.getCode();
+                        String responseMsg = httpEx.getMessage();
+                        String errorResult = httpEx.getResult();
+                    }
                 }
+
                 //主动调用取消请求的回调方法
                 @Override
                 public void onCancelled(CancelledException cex) {
