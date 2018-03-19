@@ -201,8 +201,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             FileStorage fileStorage = new FileStorage();
             //fileStorage.getUrl("userLogin")
             RequestParams params = new RequestParams(fileStorage.getUrl("userLogin"));
-//            params.addQueryStringParameter("email",email);
-//            params.addQueryStringParameter("password",password);
+            params.addQueryStringParameter("email",email);
+            params.addQueryStringParameter("password",password);
             x.http().get(params, new Callback.CommonCallback<String>() {
                 boolean loginSuccess = false;
                 Intent intent = new Intent();

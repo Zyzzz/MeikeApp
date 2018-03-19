@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @ViewInject(R.id.toolbar)
     Toolbar toolbar;
-    @ViewInject(R.id.tv_username)
     TextView tv_UserName;
     public final static int REQUEST_CODE = 1;
     @Override
@@ -36,12 +35,16 @@ public class MainActivity extends AppCompatActivity
         x.view().inject(this);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        tv_UserName = (TextView) headerView.findViewById(R.id.tv_username);
+
     }
 
     @Override
@@ -98,7 +101,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_user) {
             // Handle the camera action
-            Intent intent=new Intent(MainActivity.this, LoginActivity.class); startActivity(intent);
+            Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+            startActivityForResult(intent,REQUEST_CODE);
         } else if (id == R.id.nav_course) {
 
         }  else if (id == R.id.nav_manage) {
