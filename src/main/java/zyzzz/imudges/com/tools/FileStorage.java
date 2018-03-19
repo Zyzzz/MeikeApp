@@ -3,6 +3,10 @@ package zyzzz.imudges.com.tools;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
+import org.xutils.view.annotation.ContentView;
+
+import zyzzz.imudges.com.meikeapp.R;
+
 import static android.content.Context.MODE_PRIVATE;
 
 /**
