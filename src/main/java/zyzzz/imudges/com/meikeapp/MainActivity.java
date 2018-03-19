@@ -27,12 +27,15 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @ViewInject(R.id.toolbar)
     Toolbar toolbar;
+    MenuItem userItem;
     TextView tv_UserName;
+    boolean isLogining;
     public final static int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.view().inject(this);
+        isLogining = false;
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -43,8 +46,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
+        userItem = navigationView.getMenu().findItem(R.id.nav_user);
         tv_UserName = (TextView) headerView.findViewById(R.id.tv_username);
+        reLogin();
+    }
 
+    private void reLogin() {
+        SharedPreferences sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
+        String cookie = sp.getString("cookie",null);
+        String username = sp.getString("username",null);
+        if(cookie!=null){
+            userItem.setTitle("用户信息");
+            isLogining=true;
+            if(username!=null)
+                tv_UserName.setText(username);
+            else
+                tv_UserName.setText("未设置");
+        }
     }
 
     @Override
@@ -89,6 +107,7 @@ public class MainActivity extends AppCompatActivity
                 Bundle bundle = data.getExtras();
                 String str = bundle.getString("username");
                 tv_UserName.setText(str);
+                userItem.setTitle("用户信息");
             }
         }
     }
@@ -101,8 +120,13 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_user) {
             // Handle the camera action
-            Intent intent=new Intent(MainActivity.this, LoginActivity.class);
-            startActivityForResult(intent,REQUEST_CODE);
+            if(isLogining){
+
+            }else {
+                Intent intent=new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent,REQUEST_CODE);
+            }
+
         } else if (id == R.id.nav_course) {
 
         }  else if (id == R.id.nav_manage) {
