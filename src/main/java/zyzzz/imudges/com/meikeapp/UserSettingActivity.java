@@ -48,6 +48,13 @@ public class UserSettingActivity extends AppCompatActivity {
                 String phone = userPhone.getText().toString();
                 String address = usetAddress.getText().toString();
                 saveSetting(nickname,age,phone,address);
+                SharedPreferences userSettings = getSharedPreferences("setting", 0);
+                SharedPreferences.Editor editor = userSettings.edit();
+                editor.putString("username",nickname);
+                editor.putInt("age",Integer.parseInt(age));
+                editor.putString("phone",phone);
+                editor.putString("address",address);
+                editor.commit();
             }
         });
     }
