@@ -226,7 +226,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         SharedPreferences.Editor editor = userSettings.edit();
                         editor.putString("cookie",userModel.getCookie());
                         editor.putString("username",userModel.getNickname());
-                        editor.apply();
+                        editor.putInt("age",userModel.getAge());
+                        editor.putString("phone",userModel.getPhone());
+                        editor.putString("address",userModel.getAddress());
+                        editor.commit();
                         Toast.makeText(LoginActivity.this,"登录成功" ,Toast.LENGTH_SHORT).show();
                     }else {
                         loginResult = userModel.getResult();

@@ -35,7 +35,10 @@
             android:name=".RegisterActivity"
             android:label="用户注册"
             android:parentActivityName=".LoginActivity" />
-        <activity android:name=".UserSettingActivity" />
+        <activity android:name=".UserSettingActivity"
+            android:label="用户信息"
+            android:parentActivityName=".MainActivity"
+            />
         <activity android:name=".LessonActivity"
             android:label="课节列表"
             android:parentActivityName=".MainActivity">

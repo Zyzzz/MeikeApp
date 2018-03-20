@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity
         {
             if(resultCode==LoginActivity.RESULT_CODE)
             {
+                isLogining=true;
                 Bundle bundle = data.getExtras();
                 String str = bundle.getString("username");
                 tv_UserName.setText(str);
@@ -258,7 +259,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_user) {
             // Handle the camera action
             if(isLogining){
-
+                Intent intent=new Intent(MainActivity.this, UserSettingActivity.class);
+                startActivity(intent);
             }else {
                 Intent intent=new Intent(MainActivity.this, LoginActivity.class);
                 startActivityForResult(intent,REQUEST_CODE);
