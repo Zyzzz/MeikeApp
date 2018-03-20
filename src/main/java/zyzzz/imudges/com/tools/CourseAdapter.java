@@ -1,6 +1,8 @@
 package zyzzz.imudges.com.tools;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import zyzzz.imudges.com.meikeapp.LoginActivity;
+import zyzzz.imudges.com.meikeapp.MainActivity;
 import zyzzz.imudges.com.meikeapp.R;
 import zyzzz.imudges.com.model.CourseInformationModel;
 import zyzzz.imudges.com.model.CourseModel;
@@ -49,10 +53,21 @@ public class CourseAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.item, null);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(mContext,LoginActivity.class);
+                    Bundle argBundle=new Bundle();
+                    argBundle.putString("coursename",courseModels.get(position).getName());
+                    argBundle.putInt("courseid",courseModels.get(position).getId());
+                    intent.putExtras(argBundle);
+                    mContext.startActivity(intent);
+                }
+            });
             TextView textView = (TextView) convertView.findViewById(R.id.coursename);
             textView.setText(courseModels.get(position).getName());
         }

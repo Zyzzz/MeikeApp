@@ -87,9 +87,8 @@ public class MainActivity extends AppCompatActivity
                 for(int i =0;i<courseInformationModel.getCourseInformationEntities().size();i++){
                     courseEntityBeanList.add(courseInformationModel.getCourseInformationEntities().get(i).getCourseEntity());
                 }
-
                 courseAdapter.notifyDataSetChanged();
-                Toast.makeText(MainActivity.this,"成功",Toast.LENGTH_LONG).show();
+
             }
             //请求异常后的回调方法
             @Override

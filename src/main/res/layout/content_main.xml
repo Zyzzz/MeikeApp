@@ -77,6 +77,13 @@
                     android:layout_gravity="center"
                     android:text="计算机" />
             </LinearLayout>
+            <view
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+
+                >
+
+            </view>
 
             <LinearLayout
                 android:orientation="vertical"
