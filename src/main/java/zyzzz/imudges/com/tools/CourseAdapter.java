@@ -58,7 +58,6 @@ public class CourseAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext,courseModels.get(position).getName(),Toast.LENGTH_LONG).show();
 
                     Intent intent=new Intent(mContext,LessonActivity.class);
                     Bundle argBundle=new Bundle();

@@ -12,10 +12,10 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/course_item" />
+            android:src="@drawable/lessonitem" />
         <TextView
             android:id="@+id/lessonname"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

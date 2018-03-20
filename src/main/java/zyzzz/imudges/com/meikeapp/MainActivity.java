@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity
                 for(int i =0;i<courseInformationModel.getCourseInformationEntities().size();i++){
                     courseEntityBeanList.add(courseInformationModel.getCourseInformationEntities().get(i).getCourseEntity());
                 }
+                courseAdapter = new CourseAdapter(courseEntityBeanList,MainActivity.this);
+                coursellist.setAdapter(courseAdapter);
                 courseAdapter.notifyDataSetChanged();
 
             }
@@ -152,11 +154,12 @@ public class MainActivity extends AppCompatActivity
             List<CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean> courseEntityBeans;
             @Override
             public void onSuccess(String result) {
+
                 courseEntityBeans = jsonToArrayList(result,CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean.class);
                 courseEntityBeanList.clear();
-
                 courseEntityBeanList.addAll(courseEntityBeans);
-
+                courseAdapter = new CourseAdapter(courseEntityBeanList,MainActivity.this);
+                coursellist.setAdapter(courseAdapter);
                 courseAdapter.notifyDataSetChanged();
             }
             //请求异常后的回调方法
