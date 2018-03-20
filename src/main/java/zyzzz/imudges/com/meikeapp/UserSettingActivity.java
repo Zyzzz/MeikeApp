@@ -35,6 +35,7 @@ public class UserSettingActivity extends AppCompatActivity {
     EditText usetAddress;
     @ViewInject(R.id.user_setting_save)
     Button settingSave;
+    private String cookie;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +44,12 @@ public class UserSettingActivity extends AppCompatActivity {
         settingSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String nickname = userNickname.getText().toString();
                 String age = userAge.getText().toString();
                 String phone = userPhone.getText().toString();
                 String address = usetAddress.getText().toString();
-                saveSetting(nickname,age,phone,address);
+                saveSetting(cookie,nickname,age,phone,address);
                 SharedPreferences userSettings = getSharedPreferences("setting", 0);
                 SharedPreferences.Editor editor = userSettings.edit();
                 editor.putString("username",nickname);
@@ -59,10 +61,11 @@ public class UserSettingActivity extends AppCompatActivity {
         });
     }
 
-    private void  saveSetting(String nickname,String age, String phone,String address){
+    private void  saveSetting(String cookie,String nickname,String age, String phone,String address){
         FileStorage fileStorage = new FileStorage();
         //fileStorage.getUrl("userLogin")
         RequestParams params = new RequestParams(fileStorage.getUrl("ModfityStudent"));
+        params.addQueryStringParameter("cookie",cookie);
         params.addQueryStringParameter("nickname",nickname);
         params.addQueryStringParameter("age",age);
         params.addQueryStringParameter("phone",phone);
@@ -105,6 +108,7 @@ public class UserSettingActivity extends AppCompatActivity {
         int age = sp.getInt("age",-1);
         String phone = sp.getString("phone",null);
         String address = sp.getString("address",null);
+        cookie = sp.getString("cookie",null);
         userNickname.setText(username);
         userPhone.setText(phone);
         usetAddress.setText(address);
