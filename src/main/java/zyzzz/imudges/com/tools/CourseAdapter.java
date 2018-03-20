@@ -38,6 +38,10 @@ public class CourseAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return courseModels.get(position);
     }
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
 
     @Override
     public long getItemId(int position) {
