@@ -221,7 +221,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Gson gson =new Gson();
                     userModel = gson.fromJson(result,UserModel.class);
                     if(userModel.getStatus()==0) {
-                        Toast.makeText(LoginActivity.this,"注册成功" ,Toast.LENGTH_SHORT).show();
+                        loginSuccess = true;
+                        SharedPreferences userSettings = getSharedPreferences("setting", 0);
+                        SharedPreferences.Editor editor = userSettings.edit();
+                        editor.putString("cookie",userModel.getCookie());
+                        editor.putString("username",userModel.getNickname());
+                        editor.apply();
+                        Toast.makeText(LoginActivity.this,"登录成功" ,Toast.LENGTH_SHORT).show();
                     }else {
                         loginResult = userModel.getResult();
                     }

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -32,12 +29,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zyzzz.imudges.com.model.CourseInformationModel;
-import zyzzz.imudges.com.model.UserModel;
 import zyzzz.imudges.com.tools.CourseAdapter;
 import zyzzz.imudges.com.tools.FileStorage;
+
+import static zyzzz.imudges.com.tools.DataFactory.jsonToArrayList;
+
 @ContentView(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener{
     @ViewInject(R.id.toolbar)
     Toolbar toolbar;
     @ViewInject(R.id.courselist)
@@ -112,6 +111,45 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void getCourseListByType(String type){
+        FileStorage fileStorage = new FileStorage();
+        //fileStorage.getUrl("userLogin")
+        RequestParams params = new RequestParams(fileStorage.getUrl("getCourseByType"));
+        params.addQueryStringParameter("type",type);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            Gson gson =new Gson();
+            List<CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean> courseEntityBeans;
+            CourseAdapter courseAdapter;
+            @Override
+            public void onSuccess(String result) {
+                courseEntityBeans = jsonToArrayList(result,CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean.class);
+                courseEntityBeanList.clear();
+                for(int i =0;i<courseEntityBeans.size();i++){
+                    courseEntityBeanList.add(courseEntityBeans.get(i));
+                }
+                courseAdapter.notifyDataSetChanged();
+            }
+            //请求异常后的回调方法
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (ex instanceof HttpException) { // 网络错误
+                    HttpException httpEx = (HttpException) ex;
+                    int responseCode = httpEx.getCode();
+                    String responseMsg = httpEx.getMessage();
+                    String errorResult = httpEx.getResult();
+                }
+            }
+            //主动调用取消请求的回调方法
+            @Override
+            public void onCancelled(CancelledException cex) {
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
 
 
 
@@ -204,5 +242,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        
     }
 }
