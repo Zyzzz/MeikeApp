@@ -44,19 +44,13 @@ public class UserSettingActivity extends AppCompatActivity {
         settingSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String nickname = userNickname.getText().toString();
                 String age = userAge.getText().toString();
                 String phone = userPhone.getText().toString();
                 String address = usetAddress.getText().toString();
+
                 saveSetting(cookie,nickname,age,phone,address);
-                SharedPreferences userSettings = getSharedPreferences("setting", 0);
-                SharedPreferences.Editor editor = userSettings.edit();
-                editor.putString("username",nickname);
-                editor.putInt("age",Integer.parseInt(age));
-                editor.putString("phone",phone);
-                editor.putString("address",address);
-                editor.commit();
+
             }
         });
     }
@@ -71,9 +65,20 @@ public class UserSettingActivity extends AppCompatActivity {
         params.addQueryStringParameter("phone",phone);
         params.addQueryStringParameter("address",address);
         x.http().get(params, new Callback.CommonCallback<String>() {
+            String nickname = userNickname.getText().toString();
+            String age = userAge.getText().toString();
+            String phone = userPhone.getText().toString();
+            String address = usetAddress.getText().toString();
             @Override
             public void onSuccess(String result) {
                 Toast.makeText(UserSettingActivity.this,"用户信息修改成功",Toast.LENGTH_SHORT).show();
+                SharedPreferences userSettings = getSharedPreferences("setting", 0);
+                SharedPreferences.Editor editor = userSettings.edit();
+                editor.putString("username",nickname);
+                editor.putInt("age",Integer.parseInt(age));
+                editor.putString("phone",phone);
+                editor.putString("address",address);
+                editor.commit();
             }
 
             //请求异常后的回调方法
