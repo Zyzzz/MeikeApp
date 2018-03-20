@@ -240,6 +240,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
                     if (ex instanceof HttpException) { // 网络错误
                         HttpException httpEx = (HttpException) ex;
+                        Toast.makeText(LoginActivity.this,"网络错误",Toast.LENGTH_SHORT).show();
                         int responseCode = httpEx.getCode();
                         String responseMsg = httpEx.getMessage();
                         String errorResult = httpEx.getResult();

@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 if (ex instanceof HttpException) { // 网络错误
+                    Toast.makeText(MainActivity.this,"网络错误",Toast.LENGTH_SHORT).show();
                     HttpException httpEx = (HttpException) ex;
                     int responseCode = httpEx.getCode();
                     String responseMsg = httpEx.getMessage();
@@ -150,7 +151,6 @@ public class MainActivity extends AppCompatActivity
         RequestParams params = new RequestParams(fileStorage.getUrl("getCourseByType"));
         params.addQueryStringParameter("type",type);
         x.http().get(params, new Callback.CommonCallback<String>() {
-            Gson gson =new Gson();
             List<CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean> courseEntityBeans;
             @Override
             public void onSuccess(String result) {
@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity
             //请求异常后的回调方法
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(MainActivity.this,"网络错误",Toast.LENGTH_SHORT).show();
                 if (ex instanceof HttpException) { // 网络错误
                     HttpException httpEx = (HttpException) ex;
                     int responseCode = httpEx.getCode();
@@ -264,6 +265,8 @@ public class MainActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.nav_course) {
+            courseEntityBeanList.clear();
+            initList();
 
         }  else if (id == R.id.nav_manage) {
 

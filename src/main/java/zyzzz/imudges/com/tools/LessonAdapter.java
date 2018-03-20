@@ -23,7 +23,7 @@ public class LessonAdapter extends BaseAdapter{
     private List<LessonInformationModel.LandcviewEntitiesBean> landcviewEntitiesBeanList;
     private Context mContext;
 
-    LessonAdapter(List<LessonInformationModel.LandcviewEntitiesBean> landcviewEntitiesBeanList,Context mContext){
+    public  LessonAdapter(List<LessonInformationModel.LandcviewEntitiesBean> landcviewEntitiesBeanList,Context mContext){
         this.landcviewEntitiesBeanList = landcviewEntitiesBeanList;
         this.mContext = mContext;
 
