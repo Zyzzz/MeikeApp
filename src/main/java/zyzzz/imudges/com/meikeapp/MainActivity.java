@@ -13,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -41,6 +43,23 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     @ViewInject(R.id.courselist)
     ListView coursellist;
+    @ViewInject(R.id.computerimageview)
+    ImageView computeriv;
+    @ViewInject(R.id.computertextview)
+    TextView computertv;
+    @ViewInject(R.id.kaoyaniv)
+    ImageView kaoyaniv;
+    @ViewInject(R.id.kaoyantv)
+    TextView kaoyantv;
+    @ViewInject(R.id.sfiv)
+    ImageView sfiv;
+    @ViewInject(R.id.sftv)
+    TextView sftv;
+    @ViewInject(R.id.coursealliv)
+    ImageView coursealliv;
+    @ViewInject(R.id.coursealltv)
+    TextView coursealltv;
+
     MenuItem userItem;
     TextView tv_UserName;
     CourseAdapter courseAdapter;
@@ -66,10 +85,23 @@ public class MainActivity extends AppCompatActivity
         userItem = navigationView.getMenu().findItem(R.id.nav_user);
         tv_UserName = (TextView) headerView.findViewById(R.id.tv_username);
         reLogin();
+        initLinsiner();
         courseAdapter = new CourseAdapter(courseEntityBeanList,MainActivity.this);
         coursellist.setAdapter(courseAdapter);
         initList();
     }
+
+    private void initLinsiner() {
+        computeriv.setOnClickListener(this);
+        computertv.setOnClickListener(this);
+        kaoyaniv.setOnClickListener(this);
+        kaoyantv.setOnClickListener(this);
+        sfiv.setOnClickListener(this);
+        sftv.setOnClickListener(this);
+        coursealliv.setOnClickListener(this);
+        coursealltv.setOnClickListener(this);
+    }
+
 
     private void initList(){
         FileStorage fileStorage = new FileStorage();
@@ -78,7 +110,6 @@ public class MainActivity extends AppCompatActivity
         x.http().get(params, new Callback.CommonCallback<String>() {
             Gson gson =new Gson();
             CourseInformationModel courseInformationModel;
-            CourseAdapter courseAdapter;
             @Override
             public void onSuccess(String result) {
                 courseInformationModel = gson.fromJson(result,CourseInformationModel.class);
@@ -119,14 +150,13 @@ public class MainActivity extends AppCompatActivity
         x.http().get(params, new Callback.CommonCallback<String>() {
             Gson gson =new Gson();
             List<CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean> courseEntityBeans;
-            CourseAdapter courseAdapter;
             @Override
             public void onSuccess(String result) {
                 courseEntityBeans = jsonToArrayList(result,CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean.class);
                 courseEntityBeanList.clear();
-                for(int i =0;i<courseEntityBeans.size();i++){
-                    courseEntityBeanList.add(courseEntityBeans.get(i));
-                }
+
+                courseEntityBeanList.addAll(courseEntityBeans);
+
                 courseAdapter.notifyDataSetChanged();
             }
             //请求异常后的回调方法
@@ -246,6 +276,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        
+        if(v.getId()==R.id.coursealliv||v.getId()==R.id.coursealltv){
+            courseEntityBeanList.clear();
+            initList();
+        }else if(v.getId()==R.id.computertextview||v.getId()==R.id.computerimageview){
+            getCourseListByType("计算机");
+        }else if(v.getId()==R.id.sftv||v.getId()==R.id.sfiv){
+            getCourseListByType("四六级");
+        }else if(v.getId()==R.id.kaoyantv||v.getId()==R.id.kaoyaniv){
+            getCourseListByType("考研");
+        }
+
     }
 }
