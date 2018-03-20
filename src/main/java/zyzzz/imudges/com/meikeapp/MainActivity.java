@@ -35,7 +35,6 @@ import zyzzz.imudges.com.model.CourseInformationModel;
 import zyzzz.imudges.com.model.UserModel;
 import zyzzz.imudges.com.tools.CourseAdapter;
 import zyzzz.imudges.com.tools.FileStorage;
-
 @ContentView(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity
             //请求异常后的回调方法
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
                 if (ex instanceof HttpException) { // 网络错误
                     HttpException httpEx = (HttpException) ex;
                     int responseCode = httpEx.getCode();

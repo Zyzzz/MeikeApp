@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import zyzzz.imudges.com.meikeapp.LessonActivity;
 import zyzzz.imudges.com.meikeapp.LoginActivity;
 import zyzzz.imudges.com.meikeapp.MainActivity;
 import zyzzz.imudges.com.meikeapp.R;
@@ -60,7 +62,9 @@ public class CourseAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent(mContext,LoginActivity.class);
+                    Toast.makeText(mContext,courseModels.get(position).getName(),Toast.LENGTH_LONG).show();
+
+                    Intent intent=new Intent(mContext,LessonActivity.class);
                     Bundle argBundle=new Bundle();
                     argBundle.putString("coursename",courseModels.get(position).getName());
                     argBundle.putInt("courseid",courseModels.get(position).getId());
