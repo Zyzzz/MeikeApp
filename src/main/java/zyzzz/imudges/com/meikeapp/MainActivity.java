@@ -246,6 +246,10 @@ public class MainActivity extends AppCompatActivity
                 String str = bundle.getString("username");
                 tv_UserName.setText(str);
                 userItem.setTitle("用户信息");
+            }else if(resultCode==SettingActivity.EXIT){
+                isLogining=false;
+                tv_UserName.setText("未登录");
+                userItem.setTitle("用户登陆");
             }
         }
     }
@@ -271,6 +275,8 @@ public class MainActivity extends AppCompatActivity
             initList();
 
         }  else if (id == R.id.nav_manage) {
+            Intent intent=new Intent(MainActivity.this, SettingActivity.class);
+            startActivityForResult(intent,REQUEST_CODE);
 
         } else if (id == R.id.nav_share) {
 
