@@ -1,7 +1,10 @@
 package zyzzz.imudges.com.tools;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +68,7 @@ public class LessonAdapter extends BaseAdapter{
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     final String Lname = landcviewEntitiesBeanList.get(position).getLname();
                     int lid= landcviewEntitiesBeanList.get(position).getLid();
                     FileStorage fileStorage = new FileStorage();
@@ -112,5 +116,16 @@ public class LessonAdapter extends BaseAdapter{
             textView.setText(landcviewEntitiesBeanList.get(position).getLname());
         }
         return convertView;
+    }
+
+    private static boolean isWifi(Context mContext) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetInfo != null
+                && activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+            return true;
+        }
+        return false;
     }
 }
