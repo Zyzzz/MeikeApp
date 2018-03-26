@@ -1,9 +1,17 @@
 package zyzzz.imudges.com.meikeapp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,7 +21,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +38,10 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +75,12 @@ public class MainActivity extends AppCompatActivity
     @ViewInject(R.id.coursealltv)
     TextView coursealltv;
 
+    private Bitmap head;//头像Bitmap
+    private static String path ;//
     MenuItem userItem;
     TextView tv_UserName;
+    Dialog mCameraDialog;
+    ImageView iv_UserImage;
     CourseAdapter courseAdapter;
     boolean isLogining;
     List<CourseInformationModel.CourseInformationEntitiesBean.CourseEntityBean> courseEntityBeanList
@@ -84,14 +103,23 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         userItem = navigationView.getMenu().findItem(R.id.nav_user);
         tv_UserName = (TextView) headerView.findViewById(R.id.tv_username);
+        iv_UserImage = (ImageView) headerView.findViewById(R.id.user_imageview);
+        mCameraDialog = new Dialog(this, R.style.BottomDialog);
         reLogin();
-        initLinsiner();
+        path = Environment.getExternalStorageDirectory().getPath();
+        Bitmap bt = BitmapFactory.decodeFile(path + "head.jpg");//从Sd中找头像，转换成Bitmap
+        if (bt != null) {
+            //如果本地有头像图片的话
+            iv_UserImage.setImageBitmap(bt);
+        }
+            initLinsiner();
         courseAdapter = new CourseAdapter(courseEntityBeanList,MainActivity.this);
         coursellist.setAdapter(courseAdapter);
         initList();
     }
 
     private void initLinsiner() {
+        iv_UserImage.setOnClickListener(this);
         computeriv.setOnClickListener(this);
         computertv.setOnClickListener(this);
         kaoyaniv.setOnClickListener(this);
@@ -251,9 +279,66 @@ public class MainActivity extends AppCompatActivity
                 tv_UserName.setText("未登录");
                 userItem.setTitle("用户登陆");
             }
+        }else if (requestCode==110) {
+            cropPhoto(data.getData());//裁剪图片
+        }else if(requestCode==120){
+            File temp = new File(Environment.getExternalStorageDirectory()
+                    + "/head.jpg");
+            cropPhoto(Uri.fromFile(temp));//裁剪图片
+        }else if(requestCode==119){
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                head = extras.getParcelable("data");
+                if (head != null) {
+                    /**
+                     * 上传服务器代码
+                     */
+                    setPicToView(head);//保存在SD卡中
+                    iv_UserImage.setImageBitmap(head);//用ImageView显示出来
+                }
+            }
         }
     }
 
+    public void cropPhoto(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        //找到指定URI对应的资源图片
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        //进入系统裁剪图片的界面
+        startActivityForResult(intent, 119);
+    }
+    private void setPicToView(Bitmap mBitmap) {
+        String sdStatus = Environment.getExternalStorageState();
+        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd卡是否可用
+            return;
+        }
+        FileOutputStream b = null;
+        File file = new File(path);
+        file.mkdirs();// 创建以此File对象为名（path）的文件夹
+        String fileName = path + "head.jpg";//图片名字
+        try {
+            b = new FileOutputStream(fileName);
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件（compress：压缩）
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                //关闭流
+                b.flush();
+                b.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -299,7 +384,49 @@ public class MainActivity extends AppCompatActivity
             getCourseListByType("四六级");
         }else if(v.getId()==R.id.kaoyantv||v.getId()==R.id.kaoyaniv){
             getCourseListByType("考研");
+        }else if(v.getId()==R.id.user_imageview){
+            setDialog();
+        }else if(v.getId()==R.id.btn_choose_img){
+            Intent intent1 = new Intent(Intent.ACTION_PICK, null);//返回被选中项的URI
+            intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");//得到所有图片的URI
+//                System.out.println("MediaStore.Images.Media.EXTERNAL_CONTENT_URI  ------------>   "
+//                        + MediaStore.Images.Media.EXTERNAL_CONTENT_URI);//   content://media/external/images/media
+            startActivityForResult(intent1,110);
+        }else if(v.getId()==R.id.btn_open_camera){
+            try {
+                Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//开启相机应用程序获取并返回图片（capture：俘获）
+                intent2.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
+                        "head.jpg")));//指明存储图片或视频的地址URI
+                startActivityForResult(intent2, 120);//采用ForResult打开
+            } catch (Exception e) {
+                Toast.makeText(MainActivity.this, "相机无法启动，请先开启相机权限", Toast.LENGTH_LONG).show();
+            }
+        }else if(v.getId()==R.id.btn_cancel){
+            mCameraDialog.cancel();
         }
 
     }
+    private void setDialog() {
+        LinearLayout root = (LinearLayout) LayoutInflater.from(this).inflate(
+                R.layout.botton_dialog, null);
+        //初始化视图
+        root.findViewById(R.id.btn_choose_img).setOnClickListener(this);
+        root.findViewById(R.id.btn_open_camera).setOnClickListener(this);
+        root.findViewById(R.id.btn_cancel).setOnClickListener(this);
+        mCameraDialog.setContentView(root);
+        Window dialogWindow = mCameraDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+//        dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        lp.x = 0; // 新位置X坐标
+        lp.y = 0; // 新位置Y坐标
+        lp.width = (int) getResources().getDisplayMetrics().widthPixels; // 宽度
+        root.measure(0, 0);
+        lp.height = root.getMeasuredHeight();
+
+        lp.alpha = 9f; // 透明度
+        dialogWindow.setAttributes(lp);
+        mCameraDialog.show();
+    }
+
 }
