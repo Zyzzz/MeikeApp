@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -293,11 +297,26 @@ public class MainActivity extends AppCompatActivity
                     /**
                      * 上传服务器代码
                      */
+                    head = createCircleImage(head);
                     setPicToView(head);//保存在SD卡中
                     iv_UserImage.setImageBitmap(head);//用ImageView显示出来
+
+                    mCameraDialog.cancel();
                 }
             }
         }
+    }
+
+    public static Bitmap createCircleImage(Bitmap source) {
+        int length = source.getWidth() < source.getHeight() ? source.getWidth() : source.getHeight();
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        Bitmap target = Bitmap.createBitmap(length, length, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(target);
+        canvas.drawCircle(length / 2, length / 2, length / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(source, 0, 0, paint);
+        return target;
     }
 
     public void cropPhoto(Uri uri) {
@@ -323,7 +342,7 @@ public class MainActivity extends AppCompatActivity
         FileOutputStream b = null;
         File file = new File(path);
         file.mkdirs();// 创建以此File对象为名（path）的文件夹
-        String fileName = path + "head.jpg";//图片名字
+        String fileName = path + "/head.jpg";//图片名字
         try {
             b = new FileOutputStream(fileName);
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件（compress：压缩）
