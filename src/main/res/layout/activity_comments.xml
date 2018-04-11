@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="zyzzz.imudges.com.meikeapp.CommentsActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:elevation="1dp"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:text="评论列表" />
+        <ListView
+            android:id="@+id/commentlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+    <EditText
+        android:id="@+id/comment"
+        android:hint="输入评论"
+        android:drawablePadding="10dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp" />
+    <Button
+        android:id="@+id/commentup"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="评论"
+        android:textStyle="bold" />
+</LinearLayout>

@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.actionbartest.MainActivity">
+    <item
+        android:id="@+id/action_compose"
+        android:icon="@drawable/comments"
+        app:showAsAction="always"
+        android:title="评论"/>
+</menu>

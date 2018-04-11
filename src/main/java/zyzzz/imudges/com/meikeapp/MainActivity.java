@@ -111,8 +111,9 @@ public class MainActivity extends AppCompatActivity
         mCameraDialog = new Dialog(this, R.style.BottomDialog);
         reLogin();
         path = Environment.getExternalStorageDirectory().getPath();
-        Bitmap bt = BitmapFactory.decodeFile(path + "head.jpg");//从Sd中找头像，转换成Bitmap
+        Bitmap bt = BitmapFactory.decodeFile(path + "/head.png");//从Sd中找头像，转换成Bitmap
         if (bt != null) {
+            if(isLogining)
             //如果本地有头像图片的话
             iv_UserImage.setImageBitmap(bt);
         }
@@ -287,7 +288,7 @@ public class MainActivity extends AppCompatActivity
             cropPhoto(data.getData());//裁剪图片
         }else if(requestCode==120){
             File temp = new File(Environment.getExternalStorageDirectory()
-                    + "/head.jpg");
+                    + "/head.png");
             cropPhoto(Uri.fromFile(temp));//裁剪图片
         }else if(requestCode==119){
             if (data != null) {
@@ -342,7 +343,7 @@ public class MainActivity extends AppCompatActivity
         FileOutputStream b = null;
         File file = new File(path);
         file.mkdirs();// 创建以此File对象为名（path）的文件夹
-        String fileName = path + "/head.jpg";//图片名字
+        String fileName = path + "/head.png";//图片名字
         try {
             b = new FileOutputStream(fileName);
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件（compress：压缩）
@@ -415,7 +416,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//开启相机应用程序获取并返回图片（capture：俘获）
                 intent2.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                        "head.jpg")));//指明存储图片或视频的地址URI
+                        "head.png")));//指明存储图片或视频的地址URI
                 startActivityForResult(intent2, 120);//采用ForResult打开
             } catch (Exception e) {
                 Toast.makeText(MainActivity.this, "相机无法启动，请先开启相机权限", Toast.LENGTH_LONG).show();
